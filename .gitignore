@@ -1,5 +1,6 @@
 node_modules/
 test-results/
+Reports/
 cucumber-report.html
 
 # Machine-specific CA bundle exported for Playwright downloads behind a TLS-inspecting proxy.

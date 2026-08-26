@@ -7,7 +7,7 @@ const cliHasFeaturePath = hasCliFeaturePath(process.argv);
 const defaultConfig = {
     requireModule: ['@babel/register'],
     require: ['support/**/*.js', 'steps/**/*.js'],
-    format: ['progress', 'html:test-results/cucumber-report.html'],
+    format: ['progress'],
     formatOptions: { snippetInterface: 'async-await' }
 };
 

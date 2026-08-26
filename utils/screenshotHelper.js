@@ -8,13 +8,18 @@ function toSafeFileName(value) {
     return String(value || 'scenario').replace(/[^a-z0-9-_]+/gi, '_').slice(0, 80);
 }
 
-/** Returns the PNG buffer for report attachment, or null when capture is disabled/fails. */
-async function captureFailureScreenshot(page, label) {
-    if (!appConfig.featureToggles.captureFailureScreenshots || !page) return null;
+/** Returns the saved PNG path, or null when capture is disabled/fails. */
+async function captureFailureScreenshot(page, testName, stepName) {
+    if (!appConfig.featureToggles.captureFailureScreenshots || !page || page.isClosed()) return null;
     try {
-        fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
-        const filePath = path.join(SCREENSHOT_DIR, `${Date.now()}-${toSafeFileName(label)}.png`);
-        return await page.screenshot({ path: filePath, fullPage: appConfig.featureToggles.fullPageScreenshots });
+        const dir = path.join(SCREENSHOT_DIR, toSafeFileName(testName));
+        fs.mkdirSync(dir, { recursive: true });
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filePath = path.join(dir, `${timestamp}_FAILURE_${toSafeFileName(stepName).slice(0, 50)}.png`);
+
+        await page.screenshot({ path: filePath, fullPage: appConfig.featureToggles.fullPageScreenshots });
+        return filePath;
     } catch {
         // A capture problem must never mask the original test failure.
         return null;

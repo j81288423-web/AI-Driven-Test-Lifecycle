@@ -1,5 +1,6 @@
 const { setWorldConstructor, Before, After, setDefaultTimeout, Status } = require('@cucumber/cucumber');
 const { chromium } = require('@playwright/test');
+const fs = require('fs');
 require('dotenv').config();
 
 const { getTimeouts, getActiveEnvName } = require('../utils/configLoader');
@@ -34,10 +35,14 @@ Before(async function (scenario) {
     this.attach(`Environment: ${getActiveEnvName()} | Test case: ${this.testCaseId}`, 'text/plain');
 });
 
-After(async function ({ result }) {
-    if (result?.status === Status.FAILED) {
-        const screenshot = await captureFailureScreenshot(this.page, `${this.testCaseId}-${this.scenarioName}`);
-        if (screenshot) await this.attach(screenshot, 'image/png');
+After(async function (scenario) {
+    if (scenario.result?.status === Status.FAILED) {
+        const stepName = scenario.pickle?.steps?.at(-1)?.text || 'unknown-step';
+        const screenshotPath = await captureFailureScreenshot(this.page, this.testCaseId, stepName);
+        if (screenshotPath && fs.existsSync(screenshotPath)) {
+            // base64:image/png is what embeds the PNG inline in cucumber-report.html.
+            await this.attach(fs.readFileSync(screenshotPath).toString('base64'), 'base64:image/png');
+        }
     }
     await this.context?.close().catch(() => {});
     await this.browser?.close().catch(() => {});

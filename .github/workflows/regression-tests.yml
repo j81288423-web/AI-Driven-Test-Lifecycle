@@ -22,7 +22,7 @@ concurrency:
 jobs:
   run-regression:
     if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
-    runs-on: windows-latest
+    runs-on: [self-hosted, windows]
     timeout-minutes: 60
 
     steps:
@@ -31,6 +31,10 @@ jobs:
         with:
           clean: true
           fetch-depth: 1
+
+      - name: Seed .env from committed template
+        shell: powershell
+        run: Copy-Item .env.example .env -Force
 
       - name: Verify toolchain
         shell: powershell
@@ -46,20 +50,33 @@ jobs:
 
       - name: Install Playwright Chromium
         shell: powershell
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
-      - name: Run regression suite
-        shell: powershell
-        run: npm run test:cucumber:report -- --tags @regression
+      - name: Run regression batch file
+        shell: cmd
+        run: run-tests.bat
 
       # always() so results are captured when tests fail, which is when they matter most.
       - name: Upload results
+        id: upload
         if: always()
         uses: actions/upload-artifact@v4.1.0
         with:
           name: cucumber-results
           path: |
-            test-results/cucumber-report.html
+            Reports/dashboard-report.html
+            test-results/json/*.json
             test-results/screenshots/**
           retention-days: 30
           if-no-files-found: warn
+
+      - name: Publish report links to run summary
+        if: always()
+        shell: powershell
+        run: |
+          $api = "$env:GITHUB_API_URL/repos/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID/artifacts"
+          "## Regression report"                                             | Out-File -Append $env:GITHUB_STEP_SUMMARY
+          "- Download page: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID" | Out-File -Append $env:GITHUB_STEP_SUMMARY
+          "- Artifact id: ${{ steps.upload.outputs.artifact-id }}"            | Out-File -Append $env:GITHUB_STEP_SUMMARY
+          "- Artifact API: $api"                                             | Out-File -Append $env:GITHUB_STEP_SUMMARY
+          "- Direct download: ${{ steps.upload.outputs.artifact-url }}"       | Out-File -Append $env:GITHUB_STEP_SUMMARY
