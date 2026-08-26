@@ -36,6 +36,12 @@ jobs:
         shell: powershell
         run: Copy-Item .env.example .env -Force
 
+      # Pinned: Cucumber refuses odd-numbered Node releases (the VM ships v25).
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
       - name: Verify toolchain
         shell: powershell
         run: |
