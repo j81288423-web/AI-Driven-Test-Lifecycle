@@ -86,3 +86,42 @@ jobs:
           "- Artifact id: ${{ steps.upload.outputs.artifact-id }}"            | Out-File -Append $env:GITHUB_STEP_SUMMARY
           "- Artifact API: $api"                                             | Out-File -Append $env:GITHUB_STEP_SUMMARY
           "- Direct download: ${{ steps.upload.outputs.artifact-url }}"       | Out-File -Append $env:GITHUB_STEP_SUMMARY
+
+  # Publishes the latest dashboard to a stable Pages URL. Runs on a hosted runner
+  # because the Pages actions expect a Linux toolchain.
+  publish-report:
+    needs: run-regression
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download report artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cucumber-results
+          path: artifact
+
+      - name: Build site with stable filenames
+        run: |
+          mkdir -p site
+          cp artifact/Reports/dashboard-report.html site/index.html
+          cp artifact/Reports/dashboard-report.html site/dashboard-report.html
+          cp -r artifact/test-results/json site/json 2>/dev/null || true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
