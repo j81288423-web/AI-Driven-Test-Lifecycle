@@ -1,0 +1,16 @@
+{
+  "baseUrl": "<REPLACE_ME:resolved from process.env.BASE_URL at runtime>",
+  "testUser": {
+    "usernameEnvVar": "TEST_USERNAME",
+    "passwordEnvVar": "TEST_PASSWORD"
+  },
+  "featureToggles": {
+    "captureFailureScreenshots": true,
+    "fullPageScreenshots": true
+  },
+  "timeouts": {
+    "stepMs": 60000,
+    "assertionMs": 30000,
+    "navigationMs": 60000
+  }
+}

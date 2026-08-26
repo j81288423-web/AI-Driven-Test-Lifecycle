@@ -1,0 +1,19 @@
+{
+  "defaultEnv": "demo",
+  "environments": {
+    "demo": {
+      "baseUrlEnvVar": "BASE_URL",
+      "requiresAuth": false,
+      "timeouts": {
+        "assertionMs": 30000
+      }
+    },
+    "ci": {
+      "baseUrlEnvVar": "CI_BASE_URL",
+      "requiresAuth": false,
+      "timeouts": {
+        "assertionMs": 45000
+      }
+    }
+  }
+}

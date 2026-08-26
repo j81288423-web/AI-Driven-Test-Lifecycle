@@ -1,0 +1,22 @@
+{
+  "name": "automation-demo-summit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cucumber.js + Playwright BDD automation suite following the APM test authoring standard.",
+  "scripts": {
+    "test:cucumber": "npx cucumber-js --config cucumber.js",
+    "test:cucumber:report": "npx cucumber-js --config cucumber.js --format html:test-results/cucumber-report.html",
+    "test:cucumber:tag": "npx cucumber-js --config cucumber.js --tags",
+    "test:cucumber:smoke": "npx cucumber-js --config cucumber.js --tags @smoke",
+    "test:cucumber:regression": "npx cucumber-js --config cucumber.js --tags @regression",
+    "test:cucumber:dry-run": "npx cucumber-js --config cucumber.js --dry-run",
+    "cucumber:open": "start test-results/cucumber-report.html"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "7.24.7",
+    "@babel/register": "7.24.6",
+    "@cucumber/cucumber": "13.2.1",
+    "@playwright/test": "1.62.1",
+    "dotenv": "16.4.5"
+  }
+}

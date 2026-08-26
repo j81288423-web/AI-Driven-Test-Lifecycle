@@ -1,0 +1,11 @@
+node_modules/
+test-results/
+cucumber-report.html
+
+# Machine-specific CA bundle exported for Playwright downloads behind a TLS-inspecting proxy.
+certs/
+
+# SECURITY_NOTE: .env holds environment-specific values and must never be committed.
+.env
+.env.*
+!.env.example
