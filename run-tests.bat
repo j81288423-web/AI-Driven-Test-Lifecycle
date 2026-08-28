@@ -4,6 +4,9 @@ setlocal enabledelayedexpansion
 set "WORK_DIR=%~dp0"
 cd /d "%WORK_DIR%"
 
+set "TEST_ENV=demo"
+set "BASE_URL=https://www.automationexercise.com"
+
 :: Relative paths - cucumber's "type:path" format arg breaks on the colon in an absolute path.
 set "JSON_REL=test-results\json"
 set "REPORT_REL=Reports"
