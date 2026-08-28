@@ -1,6 +1,7 @@
 @FeatureProductSearch
 Feature: Product Search
 
+  @TC_006
   Scenario: TC_001 - Verify Product Search Returns Matching Results and Success Confirmation
     Given the user opens the Automation Exercise application
     When the user clicks the Products link
