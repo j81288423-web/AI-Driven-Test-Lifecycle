@@ -544,7 +544,7 @@ const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BDD Test Report - ${timestamp}</title>
+<title>Test execution report - ${timestamp}</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; padding: 20px; }
@@ -608,7 +608,7 @@ const html = `<!DOCTYPE html>
 </head>
 <body>
 <div class="header">
-  <h1>BDD Test Report</h1>
+  <h1>Test execution report</h1>
   <div class="timestamp">Generated: ${timestamp} | Files merged: ${files.length}</div>
 </div>
 <div class="summary">
