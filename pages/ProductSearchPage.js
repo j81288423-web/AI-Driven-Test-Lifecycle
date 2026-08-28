@@ -1,7 +1,7 @@
 const { expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
-const configPath = path.join(__dirname, '../../config/app.config.json');
+const configPath = path.resolve(__dirname, '../config/app.config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const locators = require('../locators/ProductSearchPageLocators');
 
