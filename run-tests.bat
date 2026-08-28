@@ -61,7 +61,7 @@ call :RunTag TC_002 RegisterNewAccount
 call :RunTag TC_003 LoggedInDeleteAccountVisible
 call :RunTag TC_004 LogoutAndLoginAgain
 call :RunTag TC_005 InvalidLoginError
-call :RunTag TC_006
+
 
 set END_TIME=%TIME%
 set END_DATE=%DATE%
